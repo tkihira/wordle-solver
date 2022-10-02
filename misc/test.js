@@ -30,6 +30,10 @@ const shrinkCandidate = (candidates, word, result) => {
     return candidates;
 }
 
-let ret = shrinkCandidate(additionalCandidates, 'howls', [1,0,0,0,1]);
+// let ret = shrinkCandidate(additionalCandidates, 'howls', [1,0,0,0,1]);
+// ret = ret.filter(v => v.includes("v") && v.includes(""))
+// console.log(ret);
+
+let ret = shrinkCandidate(shrinkCandidate(additionalCandidates, 'sylph', [0,0,0,0,0]), 'crane', [0,0,1,2,0]);
 ret = ret.filter(v => v.includes("v") && v.includes(""))
 console.log(ret);

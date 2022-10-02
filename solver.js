@@ -29,7 +29,7 @@ const getSuggestion = (candidates) => {
 
     // artificial suggestion
     if (candidates.length === 58 && candidates.filter(v => !v.includes('s') && !v.includes('h')).length === 0) {
-        return 'pashm';
+        return 'shark';
     }
 
     const result = [];
@@ -68,6 +68,7 @@ const solve = () => {
     let sumCount = 0;
 
     const resultWordListMap = {};
+    const resultSuggestionMap = {};
 
     for (const answer of answerCandidates) {
         let currentCandidates = answerCandidates;
@@ -77,6 +78,7 @@ const solve = () => {
         while (true) {
             const suggestion = count === 0 ? firstWord : getSuggestion(currentCandidates);
             count++;
+            resultSuggestionMap[results.join('/')] = suggestion;
             suggestionWords.push(suggestion);
             const result = checkWord(answer, suggestion);
             results.push(result.map(v => colors[v]).join(''));
@@ -101,7 +103,7 @@ const solve = () => {
         for (let i = 0; i < suggestionWords.length; i++) {
             outputStr += ` [${suggestionWords[i]}] => ${results[i]} /`;
         }
-        console.log(outputStr);
+        // console.log(outputStr);
     }
 
     console.log({ maxCount, maxWord, minCount, minWord, average: sumCount / answerCandidates.length });
@@ -110,13 +112,14 @@ const solve = () => {
     }
 
     const keyList = Object.keys(resultWordListMap).sort((a, b) => {
-        if([...a].length === [...b].length) {
+        if ([...a].length === [...b].length) {
             return a.localeCompare(b);
         }
         return [...a].length - [...b].length;
     });
     for (const key of keyList) {
-        console.log(`${key.split('/').join('=>')}: (${resultWordListMap[key].length}) [${resultWordListMap[key].join(', ')}]`)
+        const suggestion = resultSuggestionMap[key];
+        console.log(`${key.split('/').join('=>')}: ${suggestion ? `next {${suggestion}}` : '= SOLVED ='} / candidates (${resultWordListMap[key].length}) [${resultWordListMap[key].join(', ')}]`)
     }
 };
 
